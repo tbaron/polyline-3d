@@ -11,8 +11,15 @@
 
 var polyline = {};
 
+/**
+ * Rounds a number using the Python 2 rounding strategy, which differs from Javascript for negative values.
+ *
+ * Google's polyline algorithm uses the same rounding strategy as Python 2.
+ *
+ * @param {Number} value
+ * @returns {Number}
+ */
 function py2_round(value) {
-    // Google's polyline algorithm uses the same rounding strategy as Python 2, which is different from JS for negative values
     return Math.floor(Math.abs(value) + 0.5) * (value >= 0 ? 1 : -1);
 }
 
