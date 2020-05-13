@@ -1,11 +1,11 @@
 {
-  "name": "@mapbox/polyline",
-  "author": "Mapbox",
-  "description": "Polyline encoding and decoding",
-  "version": "1.1.0",
+  "name": "@tbaron/polyline-3d",
+  "author": "Thomas Baron",
+  "description": "3D Polyline encoding and decoding",
+  "version": "1.0.0",
   "repository": {
-    "type": "git",
-    "url": "git://github.com/mapbox/polyline.git"
+      "type": "git",
+      "url": "git://github.com/tbaron/polyline-3d.git"
   },
   "dependencies": {
     "meow": "^5.0.0"
@@ -16,13 +16,13 @@
   },
   "optionalDependencies": {},
   "scripts": {
-    "test": "eslint --no-eslintrc -c .eslintrc src && tap --coverage test/polyline.test.js"
+    "test": "eslint --no-eslintrc -c .eslintrc src && tap --coverage test/polyline3d.test.js"
   },
-  "main": "src/polyline.js",
+  "main": "src/polyline3d.js",
   "engines": {
     "node": "*"
   },
   "bin": {
-    "polyline": "bin/polyline.bin.js"
+    "polyline": "bin/polyline3d.bin.js"
   }
 }

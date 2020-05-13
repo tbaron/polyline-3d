@@ -1,15 +1,17 @@
 'use strict';
 
 /**
- * Based off of [the offical Google document](https://developers.google.com/maps/documentation/utilities/polylinealgorithm)
+ * Encodes and decodes a series of 3D coordinates [latitude, longitude, elevation], based on the Google Polyline algorithm
+ *
+ * https://developers.google.com/maps/documentation/utilities/polylinealgorithm
  *
  * Some parts from [this implementation](http://facstaff.unca.edu/mcmcclur/GoogleMaps/EncodePolyline/PolylineEncoder.js)
  * by [Mark McClure](http://facstaff.unca.edu/mcmcclur/)
  *
- * @module polyline
+ * @module polyline3d
  */
 
-var polyline = {};
+var polyline3d = {};
 
 /**
  * Rounds a number using the Python 2 rounding strategy, which differs from Javascript for negative values.
@@ -41,7 +43,7 @@ function encode(current, previous, factor) {
 }
 
 /**
- * Decodes to a [latitude, longitude] coordinates array.
+ * Decodes to a [latitude, longitude, elevation] coordinates array.
  *
  * This is adapted from the implementation in Project-OSRM.
  *
@@ -51,10 +53,11 @@ function encode(current, previous, factor) {
  *
  * @see https://github.com/Project-OSRM/osrm-frontend/blob/master/WebContent/routing/OSRM.RoutingGeometry.js
  */
-polyline.decode = function(str, precision) {
+polyline3d.decode = function(str, precision) {
     var index = 0,
         lat = 0,
         lng = 0,
+        elevation = 0,
         coordinates = [],
         shift = 0,
         result = 0,
@@ -101,13 +104,13 @@ polyline.decode = function(str, precision) {
 };
 
 /**
- * Encodes the given [latitude, longitude] coordinates array.
+ * Encodes the given [latitude, longitude, elevation] coordinates array.
  *
  * @param {Array.<Array.<Number>>} coordinates
  * @param {Number} precision
  * @returns {String}
  */
-polyline.encode = function(coordinates, precision) {
+polyline3d.encode = function(coordinates, precision) {
     if (!coordinates.length) { return ''; }
 
     var factor = Math.pow(10, Number.isInteger(precision) ? precision : 5),
@@ -138,14 +141,14 @@ function flipped(coords) {
  * @param {Number} precision
  * @returns {String}
  */
-polyline.fromGeoJSON = function(geojson, precision) {
+polyline3d.fromGeoJSON = function(geojson, precision) {
     if (geojson && geojson.type === 'Feature') {
         geojson = geojson.geometry;
     }
     if (!geojson || geojson.type !== 'LineString') {
         throw new Error('Input must be a GeoJSON LineString');
     }
-    return polyline.encode(flipped(geojson.coordinates), precision);
+    return polyline3d.encode(flipped(geojson.coordinates), precision);
 };
 
 /**
@@ -155,8 +158,8 @@ polyline.fromGeoJSON = function(geojson, precision) {
  * @param {Number} precision
  * @returns {Object}
  */
-polyline.toGeoJSON = function(str, precision) {
-    var coords = polyline.decode(str, precision);
+polyline3d.toGeoJSON = function(str, precision) {
+    var coords = polyline3d.decode(str, precision);
     return {
         type: 'LineString',
         coordinates: flipped(coords)
@@ -164,5 +167,5 @@ polyline.toGeoJSON = function(str, precision) {
 };
 
 if (typeof module === 'object' && module.exports) {
-    module.exports = polyline;
+    module.exports = polyline3d;
 }
